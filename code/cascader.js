@@ -1,35 +1,32 @@
 function createCascader (options) {
     $ = jQuery;
     var settings = {
+        // 最外层盒子id
         contentBox: '',
         showLabelBox: '#showCascader',
+        // 填充的级联数据
         data: [],
+        // 初始化值
         initValue: [],
+        // 选中值
         valueArr: [],
+        // 选中label
         labelArr: [],
+        // 宽高
         width: 200,
         height: 300,
+        // 颜色设置
         activeColor: '#409EFF',
+        // 标题设置
         titleArr: []
     }
 
+    // 混合实例选项
     if (options) {
         $.extend(settings, options); 
     }
 
-    // css设置：
-    $(settings.contentBox).addClass('cascader');
-    $(settings.contentBox).css({
-        height: settings.height + 50 + 'px'
-    });
-    // $(settings.showLabelBox).addClass('show-label');
-
-    var showBox = `
-        <div class="showCascader" id="showCascader">
-        </div>
-    `
-    $(settings.contentBox).append(showBox);
-    
+    // 给每一个选项组成索引链
     var addIndex = function (index, item, fatherIndex) {
         if (fatherIndex) {
             item.indexString = fatherIndex + ',' + + index;
@@ -47,12 +44,15 @@ function createCascader (options) {
         addIndex(index, item);
     })
     console.log(settings.data);
-
-
-    var contentBoxHTML = `<div class="demo" 
-        style="height:${settings.height}px;min-width: ${settings.width}px;">
-        `;
-
+    // css设置：
+    $(settings.contentBox).addClass('cascader');
+    $(settings.contentBox).css({
+        height: settings.height + 50 + 'px'
+    });
+    var showBox = `<div class="showCascader" id="showCascader"></div>`;
+    $(settings.contentBox).append(showBox);
+    
+    var contentBoxHTML = `<div class="demo" style="height:${settings.height}px;min-width: ${settings.width}px;">`;
     var lastHtml = '</div>';
 
     var initFirstBox = function (data, titleIndex) {
@@ -72,7 +72,6 @@ function createCascader (options) {
                 thisHtml += contentCase;
             })
             thisHtml += lastHtml;
-            console.log(thisHtml);
             $(settings.contentBox).append(thisHtml);
             $('.case').click(function(){
                 $(this).addClass('activeSelect');
@@ -104,11 +103,11 @@ function createCascader (options) {
                 var allActive = $('.activeSelect');
                 settings.valueArr = [];
                 settings.labelArr = [];
-                var showHtml = '当前选择的是:';
-                $.each(allActive, function(item, index){
+                var showHtml = '当前选中:';
+                $.each(allActive, function(index, item){
                     settings.valueArr.push($(this).attr('data-value'));
                     settings.labelArr.push($(this).attr('data-label'));
-                    showHtml += index === 0 ? $(this).attr('data-label') : ' > ' + $(this).attr('data-label');
+                    showHtml += index === 0 ? ' ' + '<span class="lemo">' + $(this).attr('data-label') + '</span>' : ' / ' + '<span class="lemo">' + $(this).attr('data-label') + '</span>';
                 });
                 $(settings.showLabelBox).html(showHtml);
             })
